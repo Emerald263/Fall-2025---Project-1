@@ -1,20 +1,30 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
+using UnityEngine.SocialPlatforms.Impl;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+
     public int score;
 
-    // Start is called before the first frame update
-    void Start()
-    {
+    public Text text; 
+    private float elapsedTime = 0f;
+    private bool isRunning = false;
 
+    void start()
+    {
+        isRunning = true;
     }
 
-    // Update is called once per frame
     void Update()
     {
-
+        if (isRunning)
+        {
+            elapsedTime += Time.deltaTime;
+           
+        }
     }
 }

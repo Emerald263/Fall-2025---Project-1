@@ -3,18 +3,21 @@ using System.Collections.Generic;
 using Unity.VisualScripting.ReorderableList;
 using UnityEngine.SceneManagement; //importing SceneManagement Library
 using UnityEngine;
+using UnityEngine.SocialPlatforms.Impl;
 
 public class Player_Movement : MonoBehaviour
 {
     [Header("Scripts Ref:")]
     public Hookshot Hook;
 
+    public float Score;
+
     //Movement Variables
     Rigidbody2D rb;
     public float jumpForce;
     public float speed;
     public float dash;
- 
+
     //Ground check
     public bool isGrounded;
 
@@ -33,9 +36,10 @@ public class Player_Movement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-  
+
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+        Score = 0;
     }
 
     // Update is called once per frame
@@ -53,7 +57,7 @@ public class Player_Movement : MonoBehaviour
         if (Input.GetKey("a") || Input.GetKey(KeyCode.LeftArrow))
         {
             newPosition.x -= speed;
-         
+
             //is moving
             moving_left = true;
             attack = false;
@@ -64,7 +68,7 @@ public class Player_Movement : MonoBehaviour
         if (Input.GetKey("d") || Input.GetKey(KeyCode.RightArrow))
         {
             newPosition.x += speed;
-        
+
             //is moving
             moving_right = true;
             attack = false;
@@ -85,7 +89,7 @@ public class Player_Movement : MonoBehaviour
         if (Input.GetKey("d") && Input.GetKey(KeyCode.LeftShift))
         {
             newPosition.x += speed + dash;
-   
+
             //is dashing
             dash_right = true;
             attack = false;
@@ -104,7 +108,7 @@ public class Player_Movement : MonoBehaviour
         }
 
 
-     if (Input.GetKeyUp("a") && (Input.GetKeyUp("d")))
+        if (Input.GetKeyUp("a") && (Input.GetKeyUp("d")))
         {
             moving_right = false;
             moving_left = false;
@@ -136,17 +140,22 @@ public class Player_Movement : MonoBehaviour
         if (collision.gameObject.tag.Equals("Ground"))
         {
             Debug.Log("i hit the ground");
-         
-            isGrounded = true;
-           
-        }
 
-    
+            isGrounded = true;
+
+        }
 
         if (collision.gameObject.tag.Equals("death"))
         {
             Debug.Log("death");
             SceneManager.LoadScene(1);
+        }
+
+        if (collision.gameObject.tag.Equals("Coin"))
+        {
+            Score++;
+            Debug.Log("collect");
+
         }
 
     }
@@ -161,5 +170,9 @@ public class Player_Movement : MonoBehaviour
         }
 
     }
+
+
+
+  
 }
 

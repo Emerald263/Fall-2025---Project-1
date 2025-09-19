@@ -23,11 +23,11 @@ public class Hookshot : MonoBehaviour
 
     [Header("Rotation:")]
     [SerializeField] private bool rotateOverTime = true;
-    [Range(0, 60)][SerializeField] private float rotationSpeed = 2;
+    [Range(0, 60)][SerializeField] private float rotationSpeed = 4;
 
     [Header("Distance:")]
     [SerializeField] private bool hasMaxDistance = false;
-    [SerializeField] private float maxDistnace = 3;
+    [SerializeField] private float maxDistnace = 20;
 
     private enum LaunchType
     {
@@ -42,7 +42,7 @@ public class Hookshot : MonoBehaviour
 
     [Header("No Launch To Point")]
     [SerializeField] private bool autoConfigureDistance = false;
-    [SerializeField] private float targetDistance = 1;
+    [SerializeField] private float targetDistance = 3;
     [SerializeField] private float targetFrequncy = 1;
 
     [HideInInspector] public Vector2 grapplePoint;
@@ -59,7 +59,6 @@ public class Hookshot : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
-            //Grappling
             SetGrapplePoint();
         }
         else if (Input.GetKey(KeyCode.Mouse0))
@@ -70,7 +69,6 @@ public class Hookshot : MonoBehaviour
             }
             else
             {
-
                 Vector2 mousePos = m_camera.ScreenToWorldPoint(Input.mousePosition);
                 RotateGun(mousePos, true);
             }
@@ -103,19 +101,19 @@ public class Hookshot : MonoBehaviour
         Vector3 distanceVector = lookPoint - gunPivot.position;
 
         float angle = Mathf.Atan2(distanceVector.y, distanceVector.x) * Mathf.Rad2Deg;
-        //if (rotateOverTime && allowRotationOverTime)
-        //{
-        //    gunPivot.rotation = Quaternion.Lerp(gunPivot.rotation, Quaternion.AngleAxis(angle, Vector3.forward), Time.deltaTime * rotationSpeed);
-        //}
-        //else
-        //{
+        if (rotateOverTime && allowRotationOverTime)
+        {
+            gunPivot.rotation = Quaternion.Lerp(gunPivot.rotation, Quaternion.AngleAxis(angle, Vector3.forward), Time.deltaTime * rotationSpeed);
+        }
+        else
+        {
             gunPivot.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
-        //}
+        }
     }
 
     void SetGrapplePoint()
     {
-        Vector2 distanceVector = m_camera.ScreenToWorldPoint(Input.mousePosition) - gunPivot.position;
+        Vector2 distanceVector = m_camera.ScreenToWorldPoint(Input.mousePosition) - gunHolder.localPosition;
         if (Physics2D.Raycast(firePoint.position, distanceVector.normalized))
         {
             RaycastHit2D _hit = Physics2D.Raycast(firePoint.position, distanceVector.normalized);
@@ -144,7 +142,7 @@ public class Hookshot : MonoBehaviour
             if (autoConfigureDistance)
             {
                 m_springJoint2D.autoConfigureDistance = true;
-                m_springJoint2D.frequency = 1;
+                m_springJoint2D.frequency = 0;
             }
 
             m_springJoint2D.connectedAnchor = grapplePoint;
@@ -157,14 +155,14 @@ public class Hookshot : MonoBehaviour
                 case LaunchType.Physics_Launch:
                     m_springJoint2D.connectedAnchor = grapplePoint;
 
-                    Vector2 distanceVector = firePoint.position - gunHolder.position;
+                    Vector2 distanceVector = firePoint.position;
 
                     m_springJoint2D.distance = distanceVector.magnitude;
                     m_springJoint2D.frequency = launchSpeed;
                     m_springJoint2D.enabled = true;
                     break;
                 case LaunchType.Transform_Launch:
-                    m_rigidbody.gravityScale = 1;
+                    m_rigidbody.gravityScale = 0;
                     m_rigidbody.velocity = Vector2.zero;
                     break;
             }
