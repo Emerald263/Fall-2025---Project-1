@@ -27,6 +27,8 @@ public class coin : MonoBehaviour
 
             Destroy(this.gameObject); //destroy the coin
 
+            GameManager.score += 1;
+
         }
     }
 }

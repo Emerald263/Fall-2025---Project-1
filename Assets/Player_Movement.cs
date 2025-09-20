@@ -10,7 +10,7 @@ public class Player_Movement : MonoBehaviour
     [Header("Scripts Ref:")]
     public Hookshot Hook;
 
-    public float Score;
+    public int Score;
 
     //Movement Variables
     Rigidbody2D rb;

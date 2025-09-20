@@ -1,30 +1,48 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading;
+using UnityEngine.SceneManagement; //importing SceneManagement Library
 using UnityEngine;
-using UnityEngine.SocialPlatforms.Impl;
+
 using UnityEngine.UI;
+
 
 public class GameManager : MonoBehaviour
 {
 
-    public int score;
+    public Text scoretext;
+    public Text Timer;
+    public static int score;
+    public  int timerupdate;
+    public float Timeleft = 30.0f;
 
-    public Text text; 
-    private float elapsedTime = 0f;
-    private bool isRunning = false;
-
-    void start()
+    void Start()
     {
-        isRunning = true;
+      scoretext = GetComponent<Text>();
+      Timer = GetComponent<Text>();
     }
 
     void Update()
     {
-        if (isRunning)
+
+        scoretext.text = "Score: " + score;
+
+        Timer.text = "Timer: " + Timeleft;
+
+        Timeleft -= Time.deltaTime;
+
+        if (Timeleft <= 0.0f)
         {
-            elapsedTime += Time.deltaTime;
-           
+            timeup();
         }
+
+    }
+
+    void timeup()
+    {
+        SceneManager.LoadScene(0);
     }
 }
+
+
+
+
