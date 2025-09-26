@@ -1,47 +1,67 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine.SceneManagement; //importing SceneManagement Library
 using UnityEngine;
-
+using UnityEngine.SceneManagement; //importing SceneManagement Library
+using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UI;
+
 
 
 public class GameManager : MonoBehaviour
 {
-
-    public Text scoretext;
+    //UI variables
+    public Text Scoretext;
     public Text Timer;
+
+
     public static int score;
-    public  int timerupdate;
-    public float Timeleft = 30.0f;
+    public float Timeleft = 60.0f;
+
 
     void Start()
     {
-      scoretext = GetComponent<Text>();
+      Scoretext = GetComponent<Text>();
       Timer = GetComponent<Text>();
+
+        score = 0;
     }
 
     void Update()
     {
 
-        scoretext.text = "Score: " + score;
-
-        Timer.text = "Timer: " + Timeleft;
-
-        Timeleft -= Time.deltaTime;
-
         if (Timeleft <= 0.0f)
+        {
+            Timeleft -= Time.deltaTime;
+
+            Debug.Log("time");
+        }
+
+        if (Timeleft == 0.0f)
         {
             timeup();
         }
 
     }
 
-    void timeup()
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+
+        if (collision.gameObject.tag.Equals("Coin")&& (collision.gameObject.tag.Equals("Player")))
+        {
+            score++;
+            Debug.Log("collect-gm");
+
+        }
+
+    }
+
+        void timeup()
     {
         SceneManager.LoadScene(0);
     }
+
 }
+
 
 
 
